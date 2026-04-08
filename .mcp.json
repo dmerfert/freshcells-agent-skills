@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "marketing-hub": {
+      "type": "http",
+      "url": "https://marketing-hub-phi.vercel.app/api/mcp"
+    }
+  }
+}
