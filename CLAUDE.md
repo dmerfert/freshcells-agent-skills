@@ -29,6 +29,12 @@ freshcells-agent-skills/
 - **Marketplace-Kompatibilität:** `marketplace.json` und `plugin.json` müssen valides JSON bleiben. Plugin-Name `freshcells-marketing` nicht ändern (wird von Installationen referenziert).
 - **Versionierung:** Bei inhaltlichen Änderungen an Skills oder MCP-Config die `version` in `plugin.json` und `marketplace.json` hochzählen.
 
+## Sync mit Marketing Hub
+
+- **Bei MCP-Tool-Änderungen:** Wenn im Marketing Hub MCP Tools umbenannt, Parameter geändert oder neue Tools hinzugefügt werden → SKILL.md hier aktualisieren (Tool-Referenz-Tabelle, betroffene Workflows)
+- **Bei neuen Glossar-Dateien:** Wenn neue Glossar-Artikel erstellt werden → prüfen ob Workflows in SKILL.md angepasst werden müssen
+- **Quelle der Wahrheit:** MCP-Tools → `marketing-hub/web/lib/vault.ts`. Glossar → `marketing-hub/marketing-hub-content/Glossar/`
+
 ## Skills bearbeiten
 
 Skills liegen als Markdown-Dateien unter `skills/<skill-name>/SKILL.md`. Der SKILL.md-Frontmatter (`name`, `description`) wird von Claude für die Skill-Erkennung genutzt.
