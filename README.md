@@ -24,7 +24,7 @@ Skills und MCP-Integration für KI-Agenten bei freshcells.
 
 ## MCP-Verbindung
 
-Das Plugin konfiguriert automatisch die Verbindung zum [Marketing Hub MCP](https://marketing-hub-phi.vercel.app). Beim ersten Aufruf erfolgt ein OAuth-Login mit eurem @freshcells.de Google-Konto.
+Das Plugin konfiguriert automatisch die Verbindung zum [Marketing Hub MCP](https://marketing-hub-phi.vercel.app). Der MCP-Server liefert Inhalte aus dem [Marketing Hub Repo](https://github.com/dmerfert/marketing-hub) — Glossar, Brand Voice, Referenzen und Design-Tokens werden dort gepflegt. Beim ersten Aufruf erfolgt ein OAuth-Login mit eurem @freshcells.de Google-Konto.
 
 ## Links
 
