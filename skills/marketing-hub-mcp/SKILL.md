@@ -208,4 +208,5 @@ Diese Tools können immer parallel aufgerufen werden:
 | Behauptungen ohne Beleg | Kundenzitat, KPI oder Referenz aus dem Glossar |
 | Ganze Dateien laden wenn nur ein Thema gesucht | `search_vault` mit Folder/Tag-Filter nutzen |
 | `list_files` für Glossar-Navigation | `get_glossar_overview` ist kompakter + hat Task-Routing |
+| Große Dateien komplett laden (>40KB) | `search_vault("[spezifisches Thema]")` nutzen — liefert relevante Excerpts. Besonders: Sales-Snippets, Sales-Argumente, Brand Voice, Kundenreferenzen |
 | Veraltete Produktnamen (TSB, FreshCells) | TravelSandbox® mit ®, freshcells klein |
