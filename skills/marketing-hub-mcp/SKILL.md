@@ -42,7 +42,7 @@ Diese Regeln gelten bei **jedem** Content-Output:
 4. **Plural-Ihr** als Anrede (nicht Du, nicht Sie) — außer in Angeboten/Verträgen
 5. **Jede Behauptung belegen** — Kundenzitat, KPI oder Referenz aus dem Glossar
 6. **Evidenz-Kadenz** in Langform-Content: max. 2 Absätze ohne Beleg
-7. **Nach Content-Erstellung:** Brand Voice Checkliste prüfen (Abschnitt 10 in der Brand Voice)
+7. **Vor Content-Erstellung:** `get_brand_voice(section: "Checkliste")` laden — Prüfkriterien beim Schreiben im Kontext
 8. **Verbotene Begriffe:** „billig", „Marktführer" (für freshcells), „garantiert", „state-of-the-art", „cutting-edge", „disruptiv"
 
 ## Workflows
@@ -51,10 +51,11 @@ Diese Regeln gelten bei **jedem** Content-Output:
 
 → Kombiniere mit: `/social-content`
 
-1. `get_brand_voice("de")` — Tonalität laden
-2. `search_vault("[Thema]")` — relevante Inhalte finden
-3. `get_file("[get_file_path aus Schritt 2]")` — Dateien mit Belegen laden
-4. `get_glossar_overview(task: "linkedin-post")` — empfohlene Dateien + Workflow
+1. `get_brand_voice("de", section: "tone")` — Kanalrichtlinien (LinkedIn-Tonalität)
+2. `get_brand_voice("de", section: "terminology")` — Pflichtbegriffe
+3. `search_vault("[Thema]")` — relevante Inhalte finden, `suggested_sections` nutzen
+4. `get_file("[path]", section: "[heading]")` — gezielt relevante Abschnitte laden (parallel)
+5. `get_brand_voice("de", section: "Checkliste")` — Quick-Check vor Veröffentlichung
 
 MCP liefert Fakten, Zitate, KPIs → `/social-content` formatiert als LinkedIn-Post.
 
@@ -62,21 +63,22 @@ MCP liefert Fakten, Zitate, KPIs → `/social-content` formatiert als LinkedIn-P
 
 → Kombiniere mit: `/cold-email`
 
-1. `get_brand_voice("de")` — Tonalität (Cold E-Mail: Mittel Formalität, Hoch Energie)
-2. `get_glossar_overview(task: "cold-email")` — empfohlene Dateien
-3. `get_file("Glossar/10-sales-snippets.md")` — Copy-Paste-Bausteine
-4. `get_file("Glossar/07-kundenreferenzen.md")` — Referenz für Hook
-5. Optional: `search_vault("[Branche des Prospects]")` — branchenspezifische Referenzen
+1. `get_brand_voice("de", section: "tone")` — Tonalität (Cold E-Mail: Mittel Formalität, Hoch Energie)
+2. `get_brand_voice("de", section: "Objection Handling")` — Einwandbehandlung für den Pitch
+3. `search_vault("[Branche/Thema]")` — `suggested_sections` für gezielte Snippets
+4. `get_file("Glossar/10-sales-snippets.md", section: "[passendes Thema]")` — Copy-Paste-Baustein
+5. `get_file("Glossar/07-kundenreferenzen.md", section: "[Branche]")` — Referenz für Hook
 
 ### 3. Pitch-Deck vorbereiten
 
 → Kombiniere mit: `/sales-enablement`
 
-1. `get_brand_voice("de")` — Terminologie
-2. `get_glossar_overview(task: "pitch-deck")` — empfohlene Dateien
+1. `get_brand_voice("de", section: "terminology")` — Pflichtbegriffe
+2. `get_brand_voice("de", section: "Message Pillars")` — Kernbotschaften
 3. `get_file("Glossar/15-pitch-deck-textbausteine.md")` — 13 Slides + Speaker Notes
-4. `get_file("Glossar/09-sales-argumente.md")` — 11 belegte Argumente
-5. `get_design_guide()` + `get_design_tokens("colors")` — Brand-Farben für Slides
+4. `search_vault("Sales Argumente [Thema]")` — `suggested_sections` für relevante Argumente
+5. `get_file("Glossar/09-sales-argumente.md", section: "[Argument]")` — gezielt Argument laden
+6. `get_design_guide()` + `get_design_tokens("colors")` — Brand-Farben für Slides
 
 ### 4. Pressemeldung
 
@@ -120,11 +122,11 @@ Struktur: Kundenname → Herausforderung → TravelSandbox®-Lösung → min. 1 
 
 Prüft bestehenden Content gegen die freshcells Wissensbasis:
 
-1. `get_brand_voice("de")` — Terminologie + Checkliste
-2. `get_file("Glossar/02-usps-nutzenversprechen.md")` — USPs abgleichen
-3. `get_file("Glossar/09-sales-argumente.md")` — Sales-Botschaften prüfen
-4. `get_file("Glossar/07-kundenreferenzen.md")` — Referenzen auf Aktualität prüfen
-5. Optional: `get_file("Glossar/08-kundenstimmen.md")` — Zitate verifizieren
+1. `get_brand_voice("de", section: "terminology")` — Must-Use/Never-Use prüfen
+2. `get_brand_voice("de", section: "Checkliste")` — Prüfkriterien laden
+3. `search_vault("[Themen aus dem Content]")` — Fakten verifizieren
+4. `get_file("Glossar/07-kundenreferenzen.md", section: "[genannte Referenz]")` — Aktualität prüfen
+5. Optional: `get_file("Glossar/08-kundenstimmen.md", section: "[Kundenname]")` — Zitat verifizieren
 
 Prüfpunkte: Produktnamen korrekt (®)? KPIs aktuell? Referenzen aktuell? Belege vorhanden? Verbotene Begriffe?
 
@@ -173,17 +175,17 @@ Falls kein Task-Match: `search_vault("[Thema]")` als Einstieg, dann `get_file()`
 
 | Tool | Parameter | Format | Wann |
 |------|-----------|--------|------|
-| `search_vault` | `query`, `folder?`, `tag?`, `limit?` | JSON | Thematische Suche, Pfad unbekannt |
+| `search_vault` | `query`, `folder?`, `tag?`, `limit?` | JSON | Thematische Suche, Pfad unbekannt. Response enthält `suggested_sections` (Top 3 H2/H3-Abschnitte mit Match-Count pro Ergebnis). |
 | `suggest` | `query` | JSON | Vokabular erkunden vor search_vault |
-| `get_file` | `path` | Markdown | Datei laden (Fuzzy-Matching) |
-| `get_brand_voice` | `lang` ("de"/"en") | Markdown | IMMER vor Content-Erstellung |
+| `get_file` | `path`, `section?` | Markdown | Datei laden. `section`: H2/H3 Heading (fuzzy-matched) für gezieltes Laden. `"_toc"` für Section-Index. Response enthält `available_sections`. |
+| `get_brand_voice` | `lang` ("de"/"en"), `section?` | Markdown | IMMER vor Content-Erstellung. `section`: z.B. `"Terminologie"`, `"Tonalität"`, `"Checkliste"`, `"Objection Handling"`. |
 | `get_glossar_overview` | `task?`, `detailed?` | JSON | Aufgaben-Routing, Glossar-Navigation |
 | `list_files` | `folder?`, `detailed?` | JSON | Verfügbare Dateien erkunden |
 | `search_by_tag` | `tag` | JSON | Dateien nach exaktem Tag |
 | `list_tags` | — | JSON [{tag, count}] | Verfügbare Tags entdecken |
 | `get_references` | `slug` | JSON | Verwandte Dokumente finden |
 | `get_changelog` | `maxEntries?` | Markdown | Letzte Content-Änderungen |
-| `get_design_guide` | `page?` | Markdown | Brand Design Guidelines (Fuzzy page-Match) |
+| `get_design_guide` | `page?`, `section?` | Markdown | Brand Design Guidelines. `section`: H2/H3 innerhalb einer Page (erfordert `page`). |
 | `get_design_tokens` | `category?` | JSON | Exakte Token-Werte für Code |
 | `list_assets` | `type?`, `category?` | JSON | Alle Assets auflisten |
 | `get_asset` | `name`, `type?` | JSON | Spezifisches Asset (URL + Alternativen) |
@@ -194,7 +196,7 @@ Falls kein Task-Match: `search_vault("[Thema]")` als Einstieg, dann `get_file()`
 Diese Tools können immer parallel aufgerufen werden:
 
 - `get_brand_voice` + `search_vault` + `get_glossar_overview`
-- Mehrere `get_file` Aufrufe
+- Mehrere `get_file(section:)` Aufrufe — nutze `available_sections` aus der ersten Response
 - `get_design_guide(page:)` + `get_design_tokens` + `list_assets`
 - `get_asset` + `get_file`
 
@@ -208,5 +210,5 @@ Diese Tools können immer parallel aufgerufen werden:
 | Behauptungen ohne Beleg | Kundenzitat, KPI oder Referenz aus dem Glossar |
 | Ganze Dateien laden wenn nur ein Thema gesucht | `search_vault` mit Folder/Tag-Filter nutzen |
 | `list_files` für Glossar-Navigation | `get_glossar_overview` ist kompakter + hat Task-Routing |
-| Große Dateien komplett laden (>40KB) | `search_vault("[spezifisches Thema]")` nutzen — liefert relevante Excerpts. Besonders: Sales-Snippets, Sales-Argumente, Brand Voice, Kundenreferenzen |
+| Große Dateien komplett laden (>40KB) | `get_file(path, section: "[Thema]")` oder `get_brand_voice(section: "[Thema]")` nutzen — lädt nur den relevanten Abschnitt. `"_toc"` für Section-Übersicht. |
 | Veraltete Produktnamen (TSB, FreshCells) | TravelSandbox® mit ®, freshcells klein |
