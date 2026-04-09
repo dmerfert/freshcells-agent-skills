@@ -200,6 +200,28 @@ Diese Tools können immer parallel aufgerufen werden:
 - `get_design_guide(page:)` + `get_design_tokens` + `list_assets`
 - `get_asset` + `get_file`
 
+## Section-Parameter Tipps
+
+Der `section`-Parameter nutzt Fuzzy-Matching — exakte Heading-Texte sind nicht nötig:
+
+| Eingabe | Findet | Typ |
+|---------|--------|-----|
+| `"Budget"` | „7. Euer Budget passt nicht zu unseren Vorstellungen." | H3 Objection |
+| `"Objection Handling"` | Alle 8 Einwände komplett (~5.5KB statt 42KB) | H2 mit H3-Children |
+| `"Cold Outreach"` | Cold-Outreach-Tonalitätsbeispiel (H3 unter Tonalität) | H3 |
+| `"Go-Live"` | Go-Live-Argument mit Referenzen | H2 |
+| `"Checkliste"` | Veröffentlichungs-Checkliste (12 Prüfpunkte) | H2 |
+| `"terminology"` | Pflichtbegriffe, verbotene Begriffe, Vermeiden | H2 |
+
+**Optimaler Workflow für große Dateien:**
+1. `search_vault("[Thema]")` — `suggested_sections` zeigt Top-3 relevante Abschnitte
+2. `get_file(path, section: "[heading aus suggested_sections]")` — gezielt laden
+3. `available_sections` in der Response zeigt alle weiteren — parallel nachladen wenn nötig
+
+**`_toc` für Discovery:** `get_file(path, section: "_toc")` gibt den Section-Index (~300 Tokens) — statt die ganze Datei zu laden (bis 58KB).
+
+**DE/EN-Dateien:** Für Brand Voice `get_brand_voice(section:)` statt `get_file(section:)` nutzen — `get_brand_voice` splittet erst nach Sprache, dann nach Section. `get_file` auf zweisprachigen Dateien kann die falsche Sprache matchen.
+
 ## Anti-Patterns
 
 | Nicht tun | Stattdessen |
